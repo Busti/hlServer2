@@ -6,6 +6,6 @@ import com.github.nscala_time.time.Imports._
 
 class Rainbow extends Effect {
   override def render(index: Int, strip: Strip, time: DateTime): Color = {
-    ColorHSV(index.toFloat / strip.length.toFloat, 1f, 1f)
+    ColorHSV((index.toFloat / strip.length.toFloat + time) % 1, 1f, 1f)
   }
 }

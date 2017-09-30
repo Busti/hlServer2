@@ -33,6 +33,7 @@ object HLServer extends App {
     HttpService {
       case GET -> Root / "effect" / name => {
         effect = Effects.create(name)
+        println(name)
         Ok(s"Effect $name started.")
       }
     }, "/"
