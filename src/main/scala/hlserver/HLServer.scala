@@ -22,11 +22,11 @@ object HLServer extends App {
 
   //Setup connected Strips
   val strips = List(
-    Strip(InetAddress.getByName("10.0.0.204"), 45, 3)
+    Strip(InetAddress.getByName("10.0.0.152"), 45, 4)
   )
 
   //A variable that holds the current effect
-  var effect = Effects.create("off")
+  var effect = Effects.create("rainbow")
 
   //Start the effect selection service
   BlazeBuilder.bindHttp(8080, "0.0.0.0").mountService(
@@ -44,10 +44,7 @@ object HLServer extends App {
     var map = Map[Strip, Array[Byte]]()
     for (strip <- strips) {
       val data = (0 until strip.length)
-        .flatMap(i => {
-          val (r, g, b) = Color.color2t_rgb(effect.render(i, strip, now).toRGB)
-          Array[Byte](g, b, r)
-        }).toArray
+        .flatMap(effect.render(_, strip, now).toArrayGBRW).toArray
       map += strip -> data
     }
 
