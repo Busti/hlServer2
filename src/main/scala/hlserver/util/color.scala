@@ -16,14 +16,14 @@ object Color {
   implicit def color2rgbw(color: Color): ColorRGBW = color.toRGBW
   implicit def color2hsl(color: Color): ColorHSV = color.toHSV
 
-  implicit def color2t_rgb(color: Color): (Float, Float, Float) = {
+  implicit def color2t_rgb(color: Color): (Byte, Byte, Byte) = {
     val rgb = color.toRGB
-    (rgb.red, rgb.green, rgb.blue)
+    ((rgb.red * 255).toByte, (rgb.green * 255).toByte, (rgb.blue * 255).toByte)
   }
 
-  implicit def color2t_rgbw(color: Color): (Float, Float, Float, Float) = {
+  implicit def color2t_rgbw(color: Color): (Byte, Byte, Byte, Byte) = {
     val rgbw = color.toRGBW
-    (rgbw.red, rgbw.green, rgbw.blue, rgbw.white)
+    ((rgbw.red * 255).toByte, (rgbw.green * 255).toByte, (rgbw.blue * 255).toByte, (rgbw.white * 255).toByte)
   }
 }
 

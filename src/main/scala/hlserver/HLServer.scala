@@ -1,16 +1,13 @@
 package hlserver
 
-import java.net.{ DatagramSocket, DatagramPacket, InetAddress }
-import java.lang.Thread
+import java.net.{DatagramPacket, DatagramSocket, InetAddress}
 
 import com.github.nscala_time.time.Imports._
-
-import org.http4s._, org.http4s.dsl._
+import hlserver.effect.Effects
+import hlserver.util.{Color, Strip}
+import org.http4s._
+import org.http4s.dsl._
 import org.http4s.server.blaze._
-import org.http4s.server.syntax._
-
-import hlserver.util.Strip
-import hlserver.util.Color
 
 object HLServer extends App {
   println("Starting HLServer")
@@ -47,8 +44,10 @@ object HLServer extends App {
     var map = Map[Strip, Array[Byte]]()
     for (strip <- strips) {
       val data = (0 until strip.length)
-        .flatMap(effect.render(_, strip, now))
-        .toArray
+        .flatMap(i => {
+          val (r, g, b) = Color.color2t_rgb(effect.render(i, strip, now).toRGB)
+          Array[Byte](g, b, r)
+        }).toArray
       map += strip -> data
     }
 
