@@ -22,7 +22,8 @@ object HLServer extends App {
 
   //Setup connected Strips
   val strips = List(
-    Strip(InetAddress.getByName("10.0.0.152"), 45, 4)
+    Strip(InetAddress.getByName("10.0.0.152"), 45, 4),
+    Strip(InetAddress.getByName("10.0.0.203"), 45, 3)
   )
 
   //A variable that holds the current effect
