@@ -4,7 +4,7 @@ import java.net.{DatagramPacket, DatagramSocket, InetAddress}
 
 import com.github.nscala_time.time.Imports._
 import hlserver.effect.Effects
-import hlserver.util.{Color, Strip}
+import hlserver.util.Strip
 import org.http4s._
 import org.http4s.dsl._
 import org.http4s.server.blaze._
@@ -22,18 +22,19 @@ object HLServer extends App {
 
   //Setup connected Strips
   val strips = List(
-    Strip(InetAddress.getByName("10.0.0.152"), 45, 4),
-    Strip(InetAddress.getByName("10.0.0.203"), 45, 3)
+    Strip(InetAddress.getByName("10.0.0.152"), 42, 4),
+    Strip(InetAddress.getByName("10.0.0.203"), 39, 3),
+    Strip(InetAddress.getByName("10.0.0.196"), 42, 4)
   )
 
   //A variable that holds the current effect
-  var effect = Effects.create("rainbow")
+  var effect = Effects.create("off")
 
   //Start the effect selection service
   BlazeBuilder.bindHttp(8080, "0.0.0.0").mountService(HttpService {
     case GET -> Root / "effect" / name :? params => {
       effect = Effects.create(name)
-      Ok(s"Effect $name started.")
+      Ok(s"{\"name\":\"$name\",\"started\":true}")
     }
   }, "/").run
 
