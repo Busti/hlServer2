@@ -6,13 +6,13 @@ trait Color {
   def toRGB:  ColorRGB
   def toRGBW: ColorRGBW
   def toHSV:  ColorHSV
-  def toArrayGBR: Array[Byte] = {
+  def toArrayGRB: Array[Byte] = {
     val rgb = toRGB
     val (r, g, b) = ((rgb.red * 255).toByte, (rgb.green * 255).toByte, (rgb.blue * 255).toByte)
     Array[Byte](g, r, b)
   }
 
-  def toArrayGBRW: Array[Byte] = {
+  def toArrayGRBW: Array[Byte] = {
     val rgb = toRGBW
     val (r, g, b, w) = ((rgb.red * 255).toByte, (rgb.green * 255).toByte, (rgb.blue * 255).toByte, (rgb.white * 255).toByte)
     Array[Byte](g, r, b, w)

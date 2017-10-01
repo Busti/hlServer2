@@ -29,23 +29,19 @@ object HLServer extends App {
   var effect = Effects.create("rainbow")
 
   //Start the effect selection service
-  BlazeBuilder.bindHttp(8080, "0.0.0.0").mountService(
-    HttpService {
-      case GET -> Root / "effect" / name => {
-        effect = Effects.create(name)
-        println(name)
-        Ok(s"Effect $name started.")
-      }
-    }, "/"
-  ).run
+  BlazeBuilder.bindHttp(8080, "0.0.0.0").mountService(HttpService {
+    case GET -> Root / "effect" / name :? params => {
+      effect = Effects.create(name)
+      Ok(s"Effect $name started.")
+    }
+  }, "/").run
 
   //The main loop
   while (true) {
     val now = DateTime.now
     var map = Map[Strip, Array[Byte]]()
     for (strip <- strips) {
-      val data = (0 until strip.length)
-        .flatMap(effect.render(_, strip, now).toArrayGBRW).toArray
+      val data = (0 until strip.length).flatMap(i => strip.color2array(effect.render(i, strip, now))).toArray
       map += strip -> data
     }
 
