@@ -34,7 +34,7 @@ object HLServer extends App {
   BlazeBuilder.bindHttp(8080, "0.0.0.0").mountService(HttpService {
     case GET -> Root / "effect" / name :? params => {
       effect = Effects.create(name)
-      Ok(s"{\"name\":\"$name\",\"started\":true}")
+      Ok(s"Effect $name started.")
     }
   }, "/").run
 
