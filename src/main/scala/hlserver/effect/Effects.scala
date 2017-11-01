@@ -1,14 +1,14 @@
 package hlserver.effect
 
-import hlserver.effect.effects.{Daylight, Rainbow, RandomBlink}
-import hlserver.util.{Color, Strip}
-import org.joda.time.DateTime
+import hlserver.effect.effects.{Osc, Rainbow, RandomBlink, White}
+import hlserver.util.Color
 
 object Effects {
   def create(s: String): Effect = s match {
     case "rainbow" => new Rainbow
-    case "daylight" => new Daylight
+    case "white" => new White
     case "randomblink" => new RandomBlink
-    case _ => (_: Int, _: Strip, _: DateTime) => Color(0, 0, 0)
+    case "osc" => new Osc
+    case _ => (_, _, _, _) => Color(0, 0, 0)
   }
 }
