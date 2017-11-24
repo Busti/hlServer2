@@ -22,14 +22,15 @@ object HLServer extends App {
 
   //Setup connected Strips
   val strips = List(
-    Strip(InetAddress.getByName("10.0.0.255"), 42, 4),
-    Strip(InetAddress.getByName("10.0.0.233"), 42, 4),
-    Strip(InetAddress.getByName("10.0.0.100"), 42, 4),
-    Strip(InetAddress.getByName("10.0.0.141"), 42, 4),
-    Strip(InetAddress.getByName("10.0.0.227"), 42, 4),
-    Strip(InetAddress.getByName("10.0.0.152"), 42, 4),
-    Strip(InetAddress.getByName("10.0.0.228"), 42, 4),
-    Strip(InetAddress.getByName("10.0.0.118"), 42, 4)
+    //Strip(InetAddress.getByName("10.0.0.255"), 42, 4),
+    Strip(InetAddress.getByName("10.0.0.160"), 42, 4),
+    Strip(InetAddress.getByName("10.0.0.236"), 42, 4),
+    Strip(InetAddress.getByName("10.0.0.104"), 42, 4),
+    Strip(InetAddress.getByName("10.0.0.143"), 42, 4),
+    Strip(InetAddress.getByName("10.0.0.230"), 42, 4),
+    Strip(InetAddress.getByName("10.0.0.154"), 42, 4),
+    Strip(InetAddress.getByName("10.0.0.121"), 42, 4),
+    Strip(InetAddress.getByName("10.0.0.231"), 42, 4)
   )
 
   //A variable that holds the current effect
@@ -49,19 +50,32 @@ object HLServer extends App {
   //The main loop
   var seq: Byte = 0
   while (true) {
-    val now = DateTime.now
-    var map = Map[Strip, Array[Byte]]()
-    for (strip <- strips) {
-      val data = (0 until strip.length).flatMap(i => strip.color2array(effect.render(i, strip, now, osc))).toArray
-      map += strip -> data
+    val in = scala.io.StdIn.readLine()
+    val split = in.split(" ").map(_.toInt)
+
+    val strip = strips(split(0))
+    var data = Array[Byte](seq, 0, 0, 0)
+    for (i <- 1 to strip.length) {
+      data :+= split(2).toByte
+      data :+= split(1).toByte
+      data :+= split(3).toByte
+      data :+= split(4).toByte
     }
 
-    for ((k, v) <- map) {
-      write(k.address, seq +: v)
-    }
+    write(strip.address, data)
 
+//    val now = DateTime.now
+//    var map = Map[Strip, Array[Byte]]()
+//    for (strip <- strips) {
+//      val data = (0 until strip.length).flatMap(i => strip.color2array(effect.render(i, strip, now, osc))).toArray
+//      map += strip -> data
+//    }
+//
+//    for ((k, v) <- map) {
+//      write(k.address, seq +: v)
+//    }
+//
     seq += 1
-
     Thread.sleep(50)
   }
 
